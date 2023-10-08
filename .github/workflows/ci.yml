@@ -21,9 +21,11 @@ jobs:
           - os: 'ubuntu-latest'
           - os: 'macos-11'
           - os: 'macos-latest'
+          - vm: 'dragonflybsd'
           - vm: 'freebsd'
           - vm: 'netbsd'
           - vm: 'openbsd'
+          - vm: 'solaris'
       fail-fast: false
 
     runs-on: ${{ matrix.os || 'macos-12' }}
@@ -31,6 +33,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Run in DragonflyBSD VM
+      uses: vmactions/dragonflybsd-vm@v0
+      if: matrix.vm == 'dragonflybsd'
+      with:
+        usesh: true
+        copyback: false
+        run: |
+          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+          ./testsigpipe
 
     - name: Run in FreeBSD VM
       uses: vmactions/freebsd-vm@v0
@@ -55,6 +67,16 @@ jobs:
     - name: Run in OpenBSD VM
       uses: vmactions/openbsd-vm@v0
       if: matrix.vm == 'openbsd'
+      with:
+        usesh: true
+        copyback: false
+        run: |
+          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+          ./testsigpipe
+
+    - name: Run in Solaris VM
+      uses: vmactions/solaris-vm@v0
+      if: matrix.vm == 'solaris'
       with:
         usesh: true
         copyback: false
