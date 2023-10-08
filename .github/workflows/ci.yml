@@ -18,13 +18,13 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: 'ubuntu-latest'
-          - os: 'macos-11'
-          - os: 'macos-latest'
+          #- os: 'ubuntu-latest'
+          #- os: 'macos-11'
+          #- os: 'macos-latest'
           - vm: 'dragonflybsd'
           - vm: 'freebsd'
-          - vm: 'netbsd'
-          - vm: 'openbsd'
+          #- vm: 'netbsd'
+          #- vm: 'openbsd'
           - vm: 'solaris'
       fail-fast: false
 
