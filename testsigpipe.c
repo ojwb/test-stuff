@@ -2,6 +2,9 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+// SO_NOSIGPIPE: DragonflyBSD FreeBSD NetBSD macOS (11,12) (not OpenBSD Linux)
+// MSG_NOSIGNAL: DragonflyBSD FreeBSD NetBSD macOS (11,12) OpenBSD Linux
+
 int main() {
     {
 	int fds[2];
