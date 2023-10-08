@@ -19,19 +19,55 @@ jobs:
       matrix:
         include:
           - os: 'ubuntu-latest'
+          - os: 'macos-11'
           - os: 'macos-latest'
+          - vm: 'freebsd'
+          - vm: 'netbsd'
+          - vm: 'openbsd'
       fail-fast: false
 
-    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.os || 'macos-12' }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Run in FreeBSD VM
+      uses: vmactions/freebsd-vm@v0
+      if: matrix.vm == 'freebsd'
+      with:
+        usesh: true
+        copyback: false
+        run: |
+          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+          ./testsigpipe
+
+    - name: Run in NetBSD VM
+      uses: vmactions/netbsd-vm@v0
+      if: matrix.vm == 'netbsd'
+      with:
+        usesh: true
+        copyback: false
+        run: |
+          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+          ./testsigpipe
+
+    - name: Run in OpenBSD VM
+      uses: vmactions/openbsd-vm@v0
+      if: matrix.vm == 'openbsd'
+      with:
+        usesh: true
+        copyback: false
+        run: |
+          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+          ./testsigpipe
+
     - name: Build
+      if: matrix.vm == ''
       run: |
         gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
 
     - name: Run
+      if: matrix.vm == ''
       run: |
         ./testsigpipe
