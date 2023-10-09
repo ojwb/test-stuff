@@ -80,8 +80,10 @@ jobs:
       with:
         usesh: true
         copyback: false
+        prepare: |
+          pkgutil -y -i gcc5core
         run: |
-          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+          gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
           ./testsigpipe
 
     - name: Build
