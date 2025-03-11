@@ -19,13 +19,13 @@ jobs:
       matrix:
         include:
           #- os: 'ubuntu-latest'
-          #- os: 'macos-11'
-          #- os: 'macos-latest'
+          - os: 'macos-13'
+          - os: 'macos-latest'
           #- vm: 'dragonflybsd'
           #- vm: 'freebsd'
           #- vm: 'netbsd'
           #- vm: 'openbsd'
-          - vm: 'solaris'
+          #- vm: 'solaris'
       fail-fast: false
 
     runs-on: ${{ matrix.os || 'macos-12' }}
@@ -90,6 +90,11 @@ jobs:
       if: matrix.vm == ''
       run: |
         gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
+
+    - name: Check GL
+      if: matrix.vm == ''
+      run: |
+        for h in GL OpenGL ; do echo "#include <$h/gl.h>"|gcc -xc -Wall -W -c - || echo FAILED ; done
 
     - name: Run
       if: matrix.vm == ''
