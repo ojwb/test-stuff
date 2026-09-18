@@ -59,7 +59,7 @@ posixy_open(const char *filename, int flags)
                     FILE_ATTRIBUTE_NORMAL,
                     NULL);
     if (handleWin == INVALID_HANDLE_VALUE) {
-	printf("CreateFileA failed (0x%08lx)\n", GetLastError());
+        fprintf(stderr, "CreateFileA failed (0x%08lx)\n", GetLastError());
         return -1;
     }
 
@@ -74,7 +74,7 @@ posixy_rename(const char *from, const char *to)
         return 0;
     }
 
-    printf("MoveFileEx failed (0x%08lx)\n", GetLastError());
+    fprintf(stderr, "MoveFileEx failed (0x%08lx)\n", GetLastError());
     return -1;
 }
 
@@ -86,32 +86,32 @@ int main() {
     if (fdr < 0) exit(1);
 
     if (posixy_rename("atomic-rename.c", "deletetest") < 0) {
-	perror("not ok\trename to replace deletetest");
+        perror("not ok\trename to replace deletetest");
     } else {
-	fprintf(stderr, "ok\trename to replace deletetest\n");
+        fprintf(stderr, "ok\trename to replace deletetest\n");
     }
 
     if (posixy_rename("testsigpipe.c", "README.rst") < 0) {
-	perror("not ok\trename to replace README.rst");
+        perror("not ok\trename to replace README.rst");
     } else {
-	fprintf(stderr, "ok\trename to replace README.rst\n");
+        fprintf(stderr, "ok\trename to replace README.rst\n");
     }
 
     Sleep(60000);
     int r = _write(fd, "test", 4);
     if (r < 0) {
-	perror("_write failed");
-	fprintf(stderr, "GetLastError() -> 0x%08lx\n", GetLastError());
-	return 1;
+        perror("_write failed");
+        fprintf(stderr, "GetLastError() -> 0x%08lx\n", GetLastError());
+        return 1;
     }
     fprintf(stderr, "_write returned %d\n", r);
 
     char buf[1024];
     r = _read(fdr, buf, sizeof(buf) - 1);
     if (r < 0) {
-	perror("_read failed");
-	fprintf(stderr, "GetLastError() -> 0x%08lx\n", GetLastError());
-	return 1;
+        perror("_read failed");
+        fprintf(stderr, "GetLastError() -> 0x%08lx\n", GetLastError());
+        return 1;
     }
     buf[r] = '\0';
     fprintf(stderr, "_read returned %d [%s]\n", r, buf);
