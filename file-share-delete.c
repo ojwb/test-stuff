@@ -96,6 +96,7 @@ int main() {
     }
     printf("ok\t_unlink README.rst\n");
 
+    Sleep(60000);
     int r = _write(fd, "test", 4);
     if (r < 0) {
 	perror("_write failed");
