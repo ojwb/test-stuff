@@ -81,11 +81,21 @@ posixy_rename(const char *from, const char *to)
 int main() {
     int fd = posixy_open("deletetest", O_WRONLY|O_CREAT);
     if (fd < 0) exit(1);
+
+    int fdr = posixy_open("README.rst", O_RDONLY);
+    if (fdr < 0) exit(1);
+
     if (_unlink("deletetest") < 0) {
-	perror("not ok\t_unlink");
+	perror("not ok\t_unlink deletetest");
 	return 1;
     }
-    printf("ok\t_unlink\n");
+    printf("ok\t_unlink deletetest\n");
+    if (_unlink("README.rst") < 0) {
+	perror("not ok\t_unlink README.rst");
+	return 1;
+    }
+    printf("ok\t_unlink README.rst\n");
+
     int r = _write(fd, "test", 4);
     if (r < 0) {
 	perror("_write failed");
@@ -93,5 +103,15 @@ int main() {
 	return 1;
     }
     printf("_write returned %d\n", r);
+
+    char buf[1024];
+    r = _read(fdr, buf, sizeof(buf) - 1);
+    if (r < 0) {
+	perror("_read failed");
+	fprintf(stderr, "GetLastError() -> 0x%08lx\n", GetLastError());
+	return 1;
+    }
+    buf[r] = '\0';
+    printf("_read returned %d [%s]\n", r, buf);
     return 0;
 }
