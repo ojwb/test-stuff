@@ -22,7 +22,6 @@ jobs:
           #- os: 'macos-latest'
           - os: 'macos-26-intel'
           - os: 'macos-15-intel'
-          - os: 'macos-14-intel'
           - os: 'macos-26'
           - os: 'macos-15'
           - os: 'macos-14'
