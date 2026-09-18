@@ -82,9 +82,16 @@ int main() {
     int fd = posixy_open("deletetest", O_WRONLY|O_CREAT);
     if (fd < 0) exit(1);
     if (_unlink("deletetest") < 0) {
-	perror("_unlink");
+	perror("not ok\t_unlink");
 	return 1;
     }
-    printf("ok\n");
+    printf("ok\t_unlink\n");
+    int r = _write(fd, "test", 4);
+    if (r < 0) {
+	perror("_write failed");
+	fprintf(stderr, "GetLastError() -> 0x%08lx\n", GetLastError());
+	return 1;
+    }
+    printf("_write returned %d\n", r);
     return 0;
 }
