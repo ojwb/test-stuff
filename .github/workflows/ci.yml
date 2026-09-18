@@ -37,10 +37,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Run in DragonflyBSD VM
-      uses: vmactions/dragonflybsd-vm@v0
+      uses: vmactions/dragonflybsd-vm@v1
       if: matrix.vm == 'dragonflybsd'
       with:
         usesh: true
@@ -50,7 +50,7 @@ jobs:
           ./testsigpipe
 
     - name: Run in FreeBSD VM
-      uses: vmactions/freebsd-vm@v0
+      uses: vmactions/freebsd-vm@v1
       if: matrix.vm == 'freebsd'
       with:
         usesh: true
@@ -60,7 +60,7 @@ jobs:
           ./testsigpipe
 
     - name: Run in NetBSD VM
-      uses: vmactions/netbsd-vm@v0
+      uses: vmactions/netbsd-vm@v1
       if: matrix.vm == 'netbsd'
       with:
         usesh: true
@@ -70,7 +70,7 @@ jobs:
           ./testsigpipe
 
     - name: Run in OpenBSD VM
-      uses: vmactions/openbsd-vm@v0
+      uses: vmactions/openbsd-vm@v1
       if: matrix.vm == 'openbsd'
       with:
         usesh: true
@@ -80,7 +80,7 @@ jobs:
           ./testsigpipe
 
     - name: Run in Solaris VM
-      uses: vmactions/solaris-vm@v0
+      uses: vmactions/solaris-vm@v1
       if: matrix.vm == 'solaris'
       with:
         usesh: true
