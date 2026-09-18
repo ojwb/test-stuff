@@ -68,5 +68,29 @@ int main() {
 	close(fds[0]);
     }
 
+    int fd;
+    for (fd = 0; fd <= 3; ++fd) {
+#ifdef SO_NOSIGPIPE
+	int flag = 1;
+	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, (char*)&flag, sizeof(flag)) < 0) {
+	    perror("setsockopt SO_NOSIGPIPE");
+	} else {
+	    fprintf(stderr, "Set SO_NOSIGPIPE on fd %d successfully\n", fd);
+	}
+#endif
+	if (send(fd, "x", 1, 0) < 0) {
+	    perror("send 0");
+	} else {
+	    fprintf(stderr, "send 0 on fd %d OK\n", fd);
+	}
+#ifdef MSG_NOSIGNAL
+	if (send(fd, "x", 1, MSG_NOSIGNAL) < 0) {
+	    perror("send MSG_NOSIGNAL");
+	} else {
+	    fprintf(stderr, "send MSG_NOSIGNAL on fd %d OK\n", fd);
+	}
+#endif
+    }
+
     return 0;
 }
