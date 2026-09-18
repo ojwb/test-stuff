@@ -84,6 +84,12 @@ posixy_rename(const char *from, const char *to)
 }
 
 int main() {
+    if (posixy_rename("file-share-delete.c", "newfile") < 0) {
+        perror("not ok\trename to create newfile");
+    } else {
+        fprintf(stderr, "ok\trename to create newfile\n");
+    }
+
     int fd = posixy_open("deletetest", O_WRONLY|O_CREAT);
     if (fd < 0) exit(1);
 
