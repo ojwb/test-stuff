@@ -109,6 +109,12 @@ jobs:
         gcc -Wall -W -O2 file-share-delete.c -o file-share-delete
         ./file-share-delete
 
+    - name: Test atomic rename
+      if: contains(matrix.os, 'windows')
+      run: |
+        gcc -Wall -W -O2 atomic-rename.c -o atomic-rename
+        ./atomic-rename
+
 #    - name: Check GL
 #      if: matrix.vm == ''
 #      run: |
