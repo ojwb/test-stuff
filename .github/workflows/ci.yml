@@ -30,6 +30,7 @@ jobs:
           - vm: 'netbsd'
           - vm: 'openbsd'
           - vm: 'solaris'
+          - os: 'windows-latest'
       fail-fast: false
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
@@ -91,14 +92,20 @@ jobs:
           ./testsigpipe
 
     - name: Build
-      if: matrix.vm == ''
+      if: matrix.vm == '' && contains(matrix.os, 'windows')
       run: |
         gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
 
     - name: Run
-      if: matrix.vm == ''
+      if: matrix.vm == '' && contains(matrix.os, 'windows')
       run: |
         ./testsigpipe
+
+    - name: Test FILE_SHARE_DELETE
+      if: contains(matrix.os, 'windows')
+      run: |
+        gcc -Wall -W -O2 file-share-delete.c -o file-share-delete
+        ./file-share-delete
 
 #    - name: Check GL
 #      if: matrix.vm == ''
