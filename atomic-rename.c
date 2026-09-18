@@ -70,7 +70,12 @@ posixy_open(const char *filename, int flags)
 int
 posixy_rename(const char *from, const char *to)
 {
-    if (MoveFileEx(from, to, MOVEFILE_REPLACE_EXISTING) != 0) {
+    if (ReplaceFileA(to, from, NULL, 0, 0, 0) != 0) {
+	return 0;
+    }
+    fprintf(stderr, "ReplaceFileA failed (0x%08lx), trying MoveFileEx instead\n", GetLastError());
+
+    if (MoveFileExA(from, to, MOVEFILE_REPLACE_EXISTING) != 0) {
         return 0;
     }
 
