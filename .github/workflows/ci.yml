@@ -31,6 +31,8 @@ jobs:
           #- vm: 'openbsd'
           #- vm: 'solaris'
           - os: 'windows-latest'
+          - os: 'windows-2022'
+          - os: 'windows-ll-arm'
       fail-fast: false
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
@@ -39,67 +41,67 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
-    - name: Run in DragonflyBSD VM
-      uses: vmactions/dragonflybsd-vm@v1
-      if: matrix.vm == 'dragonflybsd'
-      with:
-        usesh: true
-        copyback: false
-        run: |
-          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
-          ./testsigpipe
-
-    - name: Run in FreeBSD VM
-      uses: vmactions/freebsd-vm@v1
-      if: matrix.vm == 'freebsd'
-      with:
-        usesh: true
-        copyback: false
-        run: |
-          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
-          ./testsigpipe
-
-    - name: Run in NetBSD VM
-      uses: vmactions/netbsd-vm@v1
-      if: matrix.vm == 'netbsd'
-      with:
-        usesh: true
-        copyback: false
-        run: |
-          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
-          ./testsigpipe
-
-    - name: Run in OpenBSD VM
-      uses: vmactions/openbsd-vm@v1
-      if: matrix.vm == 'openbsd'
-      with:
-        usesh: true
-        copyback: false
-        run: |
-          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
-          ./testsigpipe
-
-    - name: Run in Solaris VM
-      uses: vmactions/solaris-vm@v1
-      if: matrix.vm == 'solaris'
-      with:
-        usesh: true
-        copyback: false
-        prepare: |
-          pkgutil -y -i gcc5core
-        run: |
-          gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
-          ./testsigpipe
-
-    - name: Build
-      if: matrix.vm == '' && !contains(matrix.os, 'windows')
-      run: |
-        gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
-
-    - name: Run
-      if: matrix.vm == '' && !contains(matrix.os, 'windows')
-      run: |
-        ./testsigpipe
+#    - name: Run in DragonflyBSD VM
+#      uses: vmactions/dragonflybsd-vm@v1
+#      if: matrix.vm == 'dragonflybsd'
+#      with:
+#        usesh: true
+#        copyback: false
+#        run: |
+#          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+#          ./testsigpipe
+#
+#    - name: Run in FreeBSD VM
+#      uses: vmactions/freebsd-vm@v1
+#      if: matrix.vm == 'freebsd'
+#      with:
+#        usesh: true
+#        copyback: false
+#        run: |
+#          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+#          ./testsigpipe
+#
+#    - name: Run in NetBSD VM
+#      uses: vmactions/netbsd-vm@v1
+#      if: matrix.vm == 'netbsd'
+#      with:
+#        usesh: true
+#        copyback: false
+#        run: |
+#          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+#          ./testsigpipe
+#
+#    - name: Run in OpenBSD VM
+#      uses: vmactions/openbsd-vm@v1
+#      if: matrix.vm == 'openbsd'
+#      with:
+#        usesh: true
+#        copyback: false
+#        run: |
+#          cc -Wall -W -O2 testsigpipe.c -o testsigpipe
+#          ./testsigpipe
+#
+#    - name: Run in Solaris VM
+#      uses: vmactions/solaris-vm@v1
+#      if: matrix.vm == 'solaris'
+#      with:
+#        usesh: true
+#        copyback: false
+#        prepare: |
+#          pkgutil -y -i gcc5core
+#        run: |
+#          gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
+#          ./testsigpipe
+#
+#    - name: Build
+#      if: matrix.vm == '' && !contains(matrix.os, 'windows')
+#      run: |
+#        gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
+#
+#    - name: Run
+#      if: matrix.vm == '' && !contains(matrix.os, 'windows')
+#      run: |
+#        ./testsigpipe
 
     - name: Test FILE_SHARE_DELETE
       if: contains(matrix.os, 'windows')
