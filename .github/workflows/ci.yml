@@ -18,17 +18,22 @@ jobs:
     strategy:
       matrix:
         include:
-          #- os: 'ubuntu-latest'
-          - os: 'macos-13'
-          - os: 'macos-latest'
-          #- vm: 'dragonflybsd'
-          #- vm: 'freebsd'
-          #- vm: 'netbsd'
-          #- vm: 'openbsd'
-          #- vm: 'solaris'
+          - os: 'ubuntu-latest'
+          #- os: 'macos-latest'
+          - os: 'macos-26-intel'
+          - os: 'macos-15-intel'
+          - os: 'macos-14-intel'
+          - os: 'macos-26'
+          - os: 'macos-15'
+          - os: 'macos-14'
+          - vm: 'dragonflybsd'
+          - vm: 'freebsd'
+          - vm: 'netbsd'
+          - vm: 'openbsd'
+          - vm: 'solaris'
       fail-fast: false
 
-    runs-on: ${{ matrix.os || 'macos-12' }}
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
 
     steps:
     - name: Checkout
@@ -91,12 +96,12 @@ jobs:
       run: |
         gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
 
-    - name: Check GL
-      if: matrix.vm == ''
-      run: |
-        for h in GL OpenGL ; do echo "#include <$h/gl.h>"|gcc -xc -Wall -W -c - || echo FAILED ; done
-
     - name: Run
       if: matrix.vm == ''
       run: |
         ./testsigpipe
+
+#    - name: Check GL
+#      if: matrix.vm == ''
+#      run: |
+#        for h in GL OpenGL ; do echo "#include <$h/gl.h>"|gcc -xc -Wall -W -c - || echo FAILED ; done
