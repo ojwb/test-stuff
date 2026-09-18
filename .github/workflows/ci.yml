@@ -112,6 +112,7 @@ jobs:
     - name: Test atomic rename
       if: contains(matrix.os, 'windows')
       run: |
+        git checkout .
         gcc -Wall -W -O2 atomic-rename.c -o atomic-rename
         ./atomic-rename
 
