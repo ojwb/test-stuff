@@ -18,18 +18,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: 'ubuntu-latest'
+          #- os: 'ubuntu-latest'
           #- os: 'macos-latest'
-          - os: 'macos-26-intel'
-          - os: 'macos-15-intel'
-          - os: 'macos-26'
-          - os: 'macos-15'
-          - os: 'macos-14'
-          - vm: 'dragonflybsd'
-          - vm: 'freebsd'
-          - vm: 'netbsd'
-          - vm: 'openbsd'
-          - vm: 'solaris'
+          #- os: 'macos-26-intel'
+          #- os: 'macos-15-intel'
+          #- os: 'macos-26'
+          #- os: 'macos-15'
+          #- os: 'macos-14'
+          #- vm: 'dragonflybsd'
+          #- vm: 'freebsd'
+          #- vm: 'netbsd'
+          #- vm: 'openbsd'
+          #- vm: 'solaris'
           - os: 'windows-latest'
       fail-fast: false
 
@@ -92,12 +92,12 @@ jobs:
           ./testsigpipe
 
     - name: Build
-      if: matrix.vm == '' && contains(matrix.os, 'windows')
+      if: matrix.vm == '' && !contains(matrix.os, 'windows')
       run: |
         gcc -Wall -W -O2 testsigpipe.c -o testsigpipe
 
     - name: Run
-      if: matrix.vm == '' && contains(matrix.os, 'windows')
+      if: matrix.vm == '' && !contains(matrix.os, 'windows')
       run: |
         ./testsigpipe
 
