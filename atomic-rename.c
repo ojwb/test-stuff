@@ -87,12 +87,30 @@ int main() {
 
     if (posixy_rename("atomic-rename.c", "deletetest") < 0) {
         perror("not ok\trename to replace deletetest");
+	if (_unlink("deletetest") < 0) {
+	    perror("not ok\t_unlink deletetest");
+	    return 1;
+	}
+	if (posixy_rename("atomic-rename.c", "deletetest") < 0) {
+	    perror("not ok\trename after _unlink to replace deletetest");
+	} else {
+	    fprintf(stderr, "ok\trename after _unlink to replace deletetest\n");
+	}
     } else {
         fprintf(stderr, "ok\trename to replace deletetest\n");
     }
 
     if (posixy_rename("testsigpipe.c", "README.rst") < 0) {
         perror("not ok\trename to replace README.rst");
+	if (_unlink("README.rst") < 0) {
+	    perror("not ok\t_unlink README.rst");
+	    return 1;
+	}
+	if (posixy_rename("testsigpipe.c", "README.rst") < 0) {
+	    perror("not ok\trename after _unlink to replace README.rst");
+	} else {
+	    fprintf(stderr, "ok\trename after _unlink to replace README.rst\n");
+	}
     } else {
         fprintf(stderr, "ok\trename to replace README.rst\n");
     }
