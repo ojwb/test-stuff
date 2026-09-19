@@ -106,7 +106,9 @@ jobs:
     - name: Test FILE_SHARE_DELETE
       if: contains(matrix.os, 'windows')
       run: |
-        gcc -Wall -W -O2 file-share-delete.c -o file-share-delete
+        which clang-cl || true
+        clang-cl --version || true
+        clang-cl -nologo -O2 -W4 file-share-delete.c
         ./file-share-delete
 
     - name: Test atomic rename
