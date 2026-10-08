@@ -110,6 +110,8 @@ jobs:
     - name: Install packages
       shell: bash
       run: |
+        rm -f /c/Strawberry/perl/bin/pkg-config
+        env | sort
         #vcpkg install libmagic
         #vcpkg install pcre2
         vcpkg install zlib
