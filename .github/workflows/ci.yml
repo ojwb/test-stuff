@@ -107,20 +107,25 @@ jobs:
       uses: egor-tensin/vs-shell@v2
       with:
         arch: x64
+    - name: Cache vcpkg packages
+      uses: actions/cache@v5
+      with:
+        path: |
+          /c/Users/runneradmin/AppData/Local/vcpkg/archives
+        key: ${{ github.job }}-${{ runner.os }}
     - name: Install packages
       shell: bash
       run: |
-        echo ===
-        ls -lR /c/vcpkg/triplets
-        echo ===
-        #rm -f /c/vcpkg/vcpkg.exe
-        #vcpkg install libmagic
-        #vcpkg install pcre2
+        env|grep x64|sort
+        vcpkg install libmagic
+        vcpkg install pcre2
         #vcpkg --vcpkg-root=$VCPKG_ROOT install zlib
         vcpkg install pkgconf
         vcpkg install zlib
         PATH=/c/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf:$PATH
-        which pkgconf || true
+        find /c/vcpkg -iname '*.pc' -ls || true
+        echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+        export PKG_CONFIG_PATH=`echo /c/vcpkg/packages/{zlib,libmagic,pcre2}_x64-windows/lib/pkgconfig`
         pkgconf zlib --cflags || true
         pkgconf zlib --libs || true
         cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
