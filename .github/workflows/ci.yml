@@ -118,13 +118,9 @@ jobs:
         #vcpkg install pcre2
         #vcpkg --vcpkg-root=$VCPKG_ROOT install zlib
         vcpkg install pkgconf
-        ls -l /c/vcpkg/packages
         vcpkg install zlib
-        ls -lR /c/vcpkg/packages
-        which pkg-config || true
+        PATH=/c/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf:$PATH
         which pkgconf || true
-        pkg-config zlib --cflags || true
-        pkg-config zlib --libs || true
         pkgconf zlib --cflags || true
         pkgconf zlib --libs || true
         cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
