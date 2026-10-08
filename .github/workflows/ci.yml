@@ -111,16 +111,16 @@ jobs:
       shell: bash
       run: |
         echo ===
-        ls -l /c/vcpkg
+        ls -lR /c/vcpkg/triplets
         echo ===
         #rm -f /c/vcpkg/vcpkg.exe
         #vcpkg install libmagic
         #vcpkg install pcre2
         #vcpkg --vcpkg-root=$VCPKG_ROOT install zlib
         vcpkg install pkgconf
-        ls -l /c/vcpkg
+        ls -l /c/vcpkg/packages
         vcpkg install zlib
-        ls -l /c/vcpkg
+        ls -lR /c/vcpkg/packages
         which pkg-config || true
         which pkgconf || true
         pkg-config zlib --cflags || true
