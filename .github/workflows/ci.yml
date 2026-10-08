@@ -110,19 +110,21 @@ jobs:
     - name: Install packages
       shell: bash
       run: |
-        env | sort
         echo ===
         ls -l /c/vcpkg
         echo ===
-        rm -f /c/vcpkg/vcpkg.exe
+        #rm -f /c/vcpkg/vcpkg.exe
         #vcpkg install libmagic
         #vcpkg install pcre2
         #vcpkg --vcpkg-root=$VCPKG_ROOT install zlib
         vcpkg install pkgconf
         ls -l /c/vcpkg
         vcpkg install zlib
+        ls -l /c/vcpkg
         which pkg-config || true
         which pkgconf || true
+        pkg-config zlib --cflags || true
+        pkg-config zlib --libs || true
         pkgconf zlib --cflags || true
         pkgconf zlib --libs || true
         cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
