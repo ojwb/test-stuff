@@ -117,10 +117,11 @@ jobs:
         vcpkg install pkgconf
         vcpkg install zlib
         which pkg-config || true
-        pkg-config zlib --cflags || true
-        pkg-config zlib --libs || true
-        cl -nologo `pkg-config zlib --cflags` -c zlibtest.cxx
-        cl -nologo zlibtest.obj `pkg-config zlib --cflags`
+        which pkgconf || true
+        pkgconf zlib --cflags || true
+        pkgconf zlib --libs || true
+        cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
+        cl -nologo zlibtest.obj `pkgconf zlib --cflags`
         zlibtest.exe
 
 #    - name: Test FILE_SHARE_DELETE
