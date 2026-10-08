@@ -107,9 +107,10 @@ jobs:
       uses: egor-tensin/vs-shell@v2
       with:
         arch: x64
-    - name: Cache vcpkg packages
-      uses: actions/cache@v5
+    - name: Restore vcpkg package cache
+      uses: actions/cache/restore@v5
       with:
+        key: ${{ github.job }}-${{ runner.os }}
         # Cache is at first valid location of:
         # %VCPKG_DEFAULT_BINARY_CACHE%
         # %LOCALAPPDATA%\vcpkg\archives
@@ -118,25 +119,34 @@ jobs:
         # FIXME: is it better to set VCPKG_DEFAULT_BINARY_CACHE?
         path: |
           /c/Users/runneradmin/AppData/Local/vcpkg/archives
-        key: ${{ github.job }}-${{ runner.os }}
     - name: Install packages
       shell: bash
       run: |
-        env|grep x64|sort
+        vcpkg install pkgconf
         vcpkg install libmagic
         vcpkg install pcre2
-        #vcpkg --vcpkg-root=$VCPKG_ROOT install zlib
-        vcpkg install pkgconf
         vcpkg install zlib
         PATH=/c/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf:$PATH
-        find /c/vcpkg -iname '*.pc' -ls || true
-        echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
         export PKG_CONFIG_PATH=`printf '%s:' /c/vcpkg/packages/{zlib,libmagic,pcre2}_x64-windows/lib/pkgconfig`
+        echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
         pkgconf zlib --cflags || true
         pkgconf zlib --libs || true
         cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
-        cl -nologo zlibtest.obj `pkgconf zlib --cflags`
+        cl -nologo zlibtest.obj `pkgconf zlib --cflags` -Fe:zlibtest.exe
         zlibtest.exe
+    - name: Save vcpkg package cache
+      if: always()
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ github.job }}-${{ runner.os }}
+        # Cache is at first valid location of:
+        # %VCPKG_DEFAULT_BINARY_CACHE%
+        # %LOCALAPPDATA%\vcpkg\archives
+        # %APPDATA%\vcpkg\archives
+        #
+        # FIXME: is it better to set VCPKG_DEFAULT_BINARY_CACHE?
+        path: |
+          /c/Users/runneradmin/AppData/Local/vcpkg/archives
 
 #    - name: Test FILE_SHARE_DELETE
 #      if: contains(matrix.os, 'windows')
