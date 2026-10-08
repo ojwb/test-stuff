@@ -31,8 +31,8 @@ jobs:
           #- vm: 'openbsd'
           #- vm: 'solaris'
           - os: 'windows-latest'
-          - os: 'windows-2022'
-          - os: 'windows-11-arm'
+          #- os: 'windows-2022'
+          #- os: 'windows-11-arm'
       fail-fast: false
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
@@ -103,21 +103,38 @@ jobs:
 #      run: |
 #        ./testsigpipe
 
-    - name: Test FILE_SHARE_DELETE
-      if: contains(matrix.os, 'windows')
+    - name: Set up Visual Studio shell
+      uses: egor-tensin/vs-shell@v2
+      with:
+        arch: x64
+    - name: Install packages
+      shell: bash
       run: |
-        which clang-cl || true
-        clang-cl --version || true
-        clang-cl -nologo -O2 -W4 file-share-delete.c
-        ./file-share-delete
+        #vcpkg install libmagic
+        #vcpkg install pcre2
+        vcpkg install zlib
+        which pkg-config || true
+        pkg-config zlib --cflags || true
+        pkg-config zlib --libs || true
+        cl -nologo `pkg-config zlib --cflags` -c zlibtest.cxx
+        cl -nologo zlibtest.obj `pkg-config zlib --cflags`
+        zlibtest.exe
 
-    - name: Test atomic rename
-      if: contains(matrix.os, 'windows')
-      run: |
-        git checkout .
-        gcc -Wall -W -O2 atomic-rename.c -o atomic-rename
-        ./atomic-rename
-
+#    - name: Test FILE_SHARE_DELETE
+#      if: contains(matrix.os, 'windows')
+#      run: |
+#        which clang-cl || true
+#        clang-cl --version || true
+#        clang-cl -nologo -O2 -W4 file-share-delete.c
+#        ./file-share-delete
+#
+#    - name: Test atomic rename
+#      if: contains(matrix.os, 'windows')
+#      run: |
+#        git checkout .
+#        gcc -Wall -W -O2 atomic-rename.c -o atomic-rename
+#        ./atomic-rename
+#
 #    - name: Check GL
 #      if: matrix.vm == ''
 #      run: |
