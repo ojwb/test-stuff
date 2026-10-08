@@ -111,10 +111,15 @@ jobs:
       shell: bash
       run: |
         env | sort
+        echo ===
+        ls -l /c/vcpkg
+        echo ===
+        rm -f /c/vcpkg/vcpkg.exe
         #vcpkg install libmagic
         #vcpkg install pcre2
         #vcpkg --vcpkg-root=$VCPKG_ROOT install zlib
         vcpkg install pkgconf
+        ls -l /c/vcpkg
         vcpkg install zlib
         which pkg-config || true
         which pkgconf || true
@@ -123,6 +128,11 @@ jobs:
         cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
         cl -nologo zlibtest.obj `pkgconf zlib --cflags`
         zlibtest.exe
+
+        # Cache is at first valid location of:
+        # %VCPKG_DEFAULT_BINARY_CACHE%
+        # %LOCALAPPDATA%\vcpkg\archives
+        # %APPDATA%\vcpkg\archives
 
 #    - name: Test FILE_SHARE_DELETE
 #      if: contains(matrix.os, 'windows')
