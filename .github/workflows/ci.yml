@@ -117,6 +117,7 @@ jobs:
       shell: bash
       run: |
         export VCPKG_DEFAULT_BINARY_CACHE='c:\vcpkgbincache'
+        mkdir -p /c/vcpkgbincache
         vcpkg install pkgconf
         vcpkg install libmagic
         vcpkg install pcre2
