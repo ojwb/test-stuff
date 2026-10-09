@@ -112,7 +112,7 @@ jobs:
       with:
         key: ${{ github.job }}-${{ runner.os }}
         path: |
-          /c/vcpkgbincache
+          c:\vcpkgbincache
     - name: Install packages
       shell: bash
       run: |
@@ -128,17 +128,15 @@ jobs:
         pkgconf zlib --cflags || true
         pkgconf zlib --libs || true
         cl `pkgconf zlib --cflags` -c zlibtest.cxx
-        ls -l *.obj || true
         cl -nologo zlibtest.obj `pkgconf zlib --cflags` -Fezlibtest.exe
-        ls -l *.exe || true
-        zlibtest.exe
+        ./zlibtest.exe
     - name: Save vcpkg package cache
       if: always()
       uses: actions/cache/save@v5
       with:
         key: ${{ github.job }}-${{ runner.os }}
         path: |
-          /c/vcpkgbincache
+          c:\vcpkgbincache
 
 #    - name: Test FILE_SHARE_DELETE
 #      if: contains(matrix.os, 'windows')
