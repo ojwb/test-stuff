@@ -111,17 +111,12 @@ jobs:
       uses: actions/cache/restore@v5
       with:
         key: ${{ github.job }}-${{ runner.os }}
-        # Cache is at first valid location of:
-        # %VCPKG_DEFAULT_BINARY_CACHE%
-        # %LOCALAPPDATA%\vcpkg\archives
-        # %APPDATA%\vcpkg\archives
-        #
-        # FIXME: is it better to set VCPKG_DEFAULT_BINARY_CACHE?
         path: |
-          /c/Users/runneradmin/AppData/Local/vcpkg/archives
+          /c/vcpkgbincache
     - name: Install packages
       shell: bash
       run: |
+        export VCPKG_DEFAULT_BINARY_CACHE='c:\vcpkgbincache'
         vcpkg install pkgconf
         vcpkg install libmagic
         vcpkg install pcre2
@@ -131,22 +126,18 @@ jobs:
         echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
         pkgconf zlib --cflags || true
         pkgconf zlib --libs || true
-        cl -nologo `pkgconf zlib --cflags` -c zlibtest.cxx
-        cl -nologo zlibtest.obj `pkgconf zlib --cflags` -Fe:zlibtest.exe
+        cl `pkgconf zlib --cflags` -c zlibtest.cxx
+        ls -l *.obj || true
+        cl -nologo zlibtest.obj `pkgconf zlib --cflags` -Fezlibtest.exe
+        ls -l *.exe || true
         zlibtest.exe
     - name: Save vcpkg package cache
       if: always()
       uses: actions/cache/save@v5
       with:
         key: ${{ github.job }}-${{ runner.os }}
-        # Cache is at first valid location of:
-        # %VCPKG_DEFAULT_BINARY_CACHE%
-        # %LOCALAPPDATA%\vcpkg\archives
-        # %APPDATA%\vcpkg\archives
-        #
-        # FIXME: is it better to set VCPKG_DEFAULT_BINARY_CACHE?
         path: |
-          /c/Users/runneradmin/AppData/Local/vcpkg/archives
+          /c/vcpkgbincache
 
 #    - name: Test FILE_SHARE_DELETE
 #      if: contains(matrix.os, 'windows')
