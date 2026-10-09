@@ -122,6 +122,7 @@ jobs:
         vcpkg install libmagic
         vcpkg install pcre2
         vcpkg install zlib
+        cat -n /c/vcpkg/packages/libmagic_x64-windows/include/magic.h
         PATH=/c/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf:$PATH
         export PKG_CONFIG_PATH=`printf '%s:' /c/vcpkg/packages/{zlib,libmagic,pcre2}_x64-windows/lib/pkgconfig`
         echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
